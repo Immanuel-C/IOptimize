@@ -396,3 +396,10 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# User Defined
+*.csproj
+*.vcxproj
+*.sln
+.vs
+.vscode
