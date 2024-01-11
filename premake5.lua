@@ -76,5 +76,8 @@ workspace "IOptimize"
 
             defaultBuildLocation()
 
+            filter "configurations:Debug"
+               debuggertype "Mixed"
+
             defaultBuildCfg()
 
