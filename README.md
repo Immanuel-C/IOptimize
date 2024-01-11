@@ -14,3 +14,6 @@ To build IOptimize you need a compiler that supports C17, .Net Framework V4.7.2 
 You will also need to install premake5 for the build system. Use premake5 to build to generate to whatever editor/compiler you would like to use. 
 
 For Visual Studio 2022 you can then press start and the application will run!
+
+
+More info and docs for the C API will be provided as this application is being devolped!
