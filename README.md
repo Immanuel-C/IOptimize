@@ -1,6 +1,10 @@
 # IOptimize
 An application to optimize windows for more fps and reduced input latency. Using proven registry tweaks and more...
 
+## Warning!
+
+**The IOptimize beta can damage your Windows install, always create a restore point before using the beta**
+
 ## How to Build 
 
 ### **IOptimize is Windows only! Only building on Visual Studio 2022 has been tested!**
