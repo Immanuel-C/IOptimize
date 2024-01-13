@@ -57,7 +57,7 @@ workspace "IOptimize"
             "System.Data.DataSetExtensions"
         }
 
-        nuget { "WPF-UI:.1.0" }
+        nuget { "WPF-UI:2.1.0" }
 
         defaultBuildLocation()
         defaultBuildCfg()
