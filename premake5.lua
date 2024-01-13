@@ -74,7 +74,7 @@ workspace "IOptimize"
 
             links { "User32", "Advapi32", "Cfgmgr32", "Setupapi" } 
 
-            postbuildcommands { "copy ..\\bin\\%{prj.name}\\%{cfg.buildcfg}\\IOptimize.dll ..\\bin\\IOptimizedWpfFrontend\\%{cfg.buildcfg}" }
+            postbuildcommands { "copy ..\\bin\\%{prj.name}\\%{cfg.buildcfg}\\IOptimize.dll ..\\bin\\IOptimizeWpfFrontend\\%{cfg.buildcfg}" }
 
             defaultBuildLocation()
 
