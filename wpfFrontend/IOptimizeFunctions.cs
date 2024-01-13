@@ -9,6 +9,20 @@ namespace IOptimizeWPFFrontend
 {
     static public class IOptimizeFunctions 
     {
+        [StructLayout(LayoutKind.Explicit)]
+        public struct IOptimizeVector2
+        {
+            // To simulate a union in C
+            // Union 1
+            [FieldOffset(0)] public float width;
+            [FieldOffset(0)] public float x;
+            // Union 2
+            [FieldOffset(4)] public float height;
+            [FieldOffset(4)] public float y;
+
+        }
+
+
         [Flags]
         public enum IOptimizeTypeFlags
         {
@@ -24,6 +38,10 @@ namespace IOptimizeWPFFrontend
 
         [DllImport("IOptimize.dll")]
         public static extern void IOptimizeSetRegistryTweaks(IOptimizeTypeFlags optimizeType);
+
+        // Parameter msi is to be dealt with like a boolean
+        [DllImport("IOptimize.dll")]
+        public static extern void IOptimizeSetGpuMsiMode(int msi);
 
         [DllImport("IOptimize.dll")]
         public static extern void IOptimizeSetDisplayResolution(int width, int height);

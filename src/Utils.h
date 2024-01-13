@@ -6,6 +6,12 @@
 extern "C" {
 #endif
 
+#ifdef IOPTIMIZE_EXPORT_DLL
+	#define IOPTIMIZE_API __declspec(dllexport)
+#else 
+	#define IOPTIMIZE_API __declspec(dllimport)
+#endif
+
 
 #ifndef TRUE
 #define TRUE 1
@@ -18,6 +24,11 @@ extern "C" {
 #ifndef NULLPTR
 #define NULLPTR (void*)0
 #endif
+
+struct IOptimizeVector2 {
+	union { float width, x;  };
+	union { float height, y; };
+};
 
 typedef uint64_t Flags;
 typedef Flags IOptimizeTypeFlags;

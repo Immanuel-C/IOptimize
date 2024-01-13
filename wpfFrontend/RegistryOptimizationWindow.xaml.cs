@@ -37,12 +37,19 @@ namespace WPFFrontend
         IOptimizeFunctions.IOptimizeTypeFlags optimizeTypeFlags = new IOptimizeFunctions.IOptimizeTypeFlags();
         IOptimizeFunctions.IOptimizeTypeFlags gameOptimizeTypeFlags = new IOptimizeFunctions.IOptimizeTypeFlags();
 
-        public RegistryOptimizationWindow()
+        Window main;
+
+        public RegistryOptimizationWindow(Window mainWindow)
         {
             InitializeComponent();
 
+            GameBoxLabel.Visibility = Visibility.Hidden;
+            GameComboBox.Visibility = Visibility.Hidden;
+
             OptimizeTypeComboBox.ItemsSource = optimizeTypeStrings; ;
-            GameComboBox.ItemsSource = gameOptimizeTypeStrings; 
+            GameComboBox.ItemsSource = gameOptimizeTypeStrings;
+            main = mainWindow;
+
         }
 
         private void OptimizeTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -91,6 +98,11 @@ namespace WPFFrontend
 
         private void ApplyOptimizationButton_Click(object sender, RoutedEventArgs e)
         {
+            if (MsiModeCheckBox.IsChecked == true)
+            {
+                IOptimizeFunctions.IOptimizeSetGpuMsiMode(1);
+            }
+
             if (optimizeTypeFlags == IOptimizeFunctions.IOptimizeTypeFlags.None)
             {
                 MessageBox.Show("You need to set an optimization type!", "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -109,7 +121,14 @@ namespace WPFFrontend
 
         private void RevertOptimizationButton_Click(object sender, RoutedEventArgs e)
         {
+            IOptimizeFunctions.IOptimizeSetGpuMsiMode(0);
             IOptimizeFunctions.IOptimizeSetRegistryTweaks(IOptimizeFunctions.IOptimizeTypeFlags.Revert);
+        }
+
+        private void BackToMainWindowButton_Click(object sender, RoutedEventArgs e)
+        {
+            main.Visibility = Visibility.Visible;
+            Close();
         }
     }
 }

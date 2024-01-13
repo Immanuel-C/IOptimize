@@ -24,15 +24,21 @@ namespace IOptimizeWPFFrontend
     {
         public MainWindow()
         {
-            
             InitializeComponent();
         }
 
         private void SwitchToRegistryOptimizationPage_Click(object sender, RoutedEventArgs e)
         {
-            RegistryOptimizationWindow window = new RegistryOptimizationWindow();
-
+            RegistryOptimizationWindow window = new RegistryOptimizationWindow(this);
             window.Show();
+            Visibility = Visibility.Hidden;
+        }
+
+        private void SwitchToResolutionChangerWindow_Click(object sender, RoutedEventArgs e)
+        {
+            ResolutionChangerWindow window = new ResolutionChangerWindow();
+            window.Show();
+            Visibility = Visibility.Hidden;
         }
     }
 

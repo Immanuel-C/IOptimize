@@ -6,9 +6,9 @@
 extern "C" {
 #endif
 
-__declspec(dllexport) int IOptimizeSetGpuMsiMode(int msi);
-__declspec(dllexport) void IOptimizeSetDisplayResolution(int width, int height);
-__declspec(dllexport) void IOptimizeSetRegistryTweaks(IOptimizeTypeFlags optimizeType);
+IOPTIMIZE_API void IOptimizeSetGpuMsiMode(int msi);
+IOPTIMIZE_API void IOptimizeSetDisplayResolution(int width, int height);
+IOPTIMIZE_API void IOptimizeSetRegistryTweaks(IOptimizeTypeFlags optimizeType);
 
 #ifdef __cplusplus
 }

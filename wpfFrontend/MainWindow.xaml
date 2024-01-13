@@ -3,11 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
         xmlns:local="clr-namespace:IOptimizeWPFFrontend"
         mc:Ignorable="d"
-        Title="IOptimize" Height="450" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="IOptimize" Height="450" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Background="#282C34">
     <Grid>
 
-        <Button Name="SwitchToRegistryOptimizationWindow" Content="Registry Optimization" Margin="0,25,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="134" Click="SwitchToRegistryOptimizationPage_Click"></Button>
+        <Button Name="SwitchToRegistryOptimizationWindow" Content="Registry Optimization" Margin="0,25,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="171" Click="SwitchToRegistryOptimizationPage_Click" />
+
+        <Button Name="SwitchToResolutionChangerWindow" Content="Resolution Changer" Margin="0,70,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="171" Click="SwitchToResolutionChangerWindow_Click" />
     </Grid>
 </Window>

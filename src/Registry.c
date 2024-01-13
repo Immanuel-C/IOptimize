@@ -60,8 +60,9 @@ static void _IOptimizeDeleteRegistryValues(struct _IOptimizeDeleteRegistryValues
     RegCloseKey(key);
 }
 
+
 // TODO: Complete function
-int IOptimizeSetGpuMsiMode(int msi) {
+void IOptimizeSetGpuMsiMode(int msi) {
     int result;
     
     HDEVINFO hDevInfo = SetupDiGetClassDevs(
@@ -73,62 +74,72 @@ int IOptimizeSetGpuMsiMode(int msi) {
 
     if (hDevInfo == INVALID_HANDLE_VALUE) {
         result = GetLastError();
-        return result;
+        return;
     }
 
     SP_DEVINFO_DATA deviceInfoData = { sizeof(SP_DEVINFO_DATA) };
 
-    char subKey[512] = { 0 };
-    size_t subKeySize = 512;
-
     for (int i = 0; SetupDiEnumDeviceInfo(hDevInfo, i, &deviceInfoData); i++) {
-        char instanceId[2046] = { 0 };
-        DWORD buffersize = 2046;
-        DWORD req_bufsize = 0;
+        DWORD reqBufsize = 0;
+        const char* fakeInstanceId = '\0';
+        SetupDiGetDeviceInstanceIdA(hDevInfo, &deviceInfoData, (PBYTE)fakeInstanceId, 1, &reqBufsize);
+
+        const char* subKey = malloc(reqBufsize + 256);
+        size_t subKeySize = reqBufsize + 256;
+        memset(subKey, 0, subKeySize);
+
+        const char* instanceId = malloc(reqBufsize);
+        DWORD instanceIdSize = reqBufsize;
+        memset(instanceId, 0, instanceIdSize);
 
         // get device description information
-        if (!SetupDiGetDeviceInstanceIdA(hDevInfo, &deviceInfoData, (PBYTE)instanceId, buffersize, &req_bufsize)) {
+        if (!SetupDiGetDeviceInstanceIdA(hDevInfo, &deviceInfoData, (PBYTE)instanceId, instanceIdSize, &reqBufsize)) {
             result = GetLastError();
-            continue;
+            return;
         }
         
         char temp[512] = { 0 };
         sprintf_s(temp, 512, "Display device %d: Device Instance ID: %s\n", i, instanceId);
         puts(temp);
 
-        memset(subKey, 0, subKeySize);
-
         strcat(subKey, "SYSTEM\\CurrentControlSet\\Enum\\");
         strcat(subKey, instanceId);
         strcat(subKey, "\\Device Parameters\\Interrupt Management\\MessageSignaledInterruptProperties\\");
 
-        DWORD dwType = REG_SZ;
-        char keyVal[255] = { 0 };
-        DWORD keyValSizeCB = sizeof(keyVal);
+        const char* valueName = "MSISupported";
 
-        HKEY hKey = NULL;
+        if (msi) {
+            DWORD valueData = 0x00000001;
 
-        if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, subKey, NULL, KEY_QUERY_VALUE, &hKey) == ERROR_SUCCESS) {
-            result = RegQueryValueExA(hKey, "MSISupported", NULL, &dwType, (LPBYTE)keyVal, &keyValSizeCB);
-            printf("MSISupported: %i", keyVal[0]);
-            RegCloseKey(hKey);
+            struct _IOptimizeSetRegistryDwordValuesInfo setMsiModeRegistryValue = {
+                .hKey = HKEY_LOCAL_MACHINE,
+                .subKey = subKey,
+                .valueNames = &valueName,
+                .valueNamesSize = 1,
+                .valueData = &valueData,
+                .cbSizePerIndex = sizeof(DWORD)
+            };
+
+            _IOptimizeSetRegistryDwordValues(&setMsiModeRegistryValue);
         }
-        else {
-            memset(subKey, 0, subKeySize);
-            strcat(subKey, "SYSTEM\\CurrentControlSet\\Enum\\");
-            strcat(subKey, instanceId);
-            strcat(subKey, "\\Device Parameters\\Interrupt Management\\");
-            if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, subKey, NULL, KEY_QUERY_VALUE, &hKey) == ERROR_SUCCESS) {
+        else if (!msi) {
+            DWORD valueData = 0x00000000;
 
-            }
-            else {
-                MessageBoxA(NULL, "Can't enable MSI mode on this system, try manually enabling it through MSI Util V3", "Error!", MB_OK);
-            }
+            struct _IOptimizeSetRegistryDwordValuesInfo setMsiModeRegistryValue = {
+                .hKey = HKEY_LOCAL_MACHINE,
+                .subKey = subKey,
+                .valueNames = &valueName,
+                .valueNamesSize = 1,
+                .valueData = &valueData,
+                .cbSizePerIndex = sizeof(DWORD)
+            };
+
+            _IOptimizeSetRegistryDwordValues(&setMsiModeRegistryValue);
         }
 
+        free(subKey);
+        free(instanceId);
     }
-
-    return 0;
 }
 
 

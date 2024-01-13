@@ -76,6 +76,8 @@ workspace "IOptimize"
 
             defaultBuildLocation()
 
+            defines { "IOPTIMIZE_EXPORT_DLL" }
+
             filter "configurations:Debug"
                debuggertype "Mixed"
 

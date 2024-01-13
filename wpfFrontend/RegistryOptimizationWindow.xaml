@@ -5,15 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFFrontend"
         mc:Ignorable="d"
-        Title="IOptimize Registry Optimizations" Height="450" Width="450" WindowStartupLocation="CenterScreen">
+        Title="IOptimize Registry Optimizations" Height="450" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Background="#282C34">
     <Grid>
         <Label Name="TitleLabel" Content="Registry Optimizations" FontSize="24" HorizontalAlignment="Center"  VerticalAlignment="Top" />
         <ComboBox Name="OptimizeTypeComboBox" HorizontalAlignment="Center"  VerticalAlignment="Top" Width="120" Margin="0,83,0,0" SelectionChanged="OptimizeTypeComboBox_SelectionChanged"/>
-        <Label Name="OptimizeTypeLabel" Content="Select Optimization Type" HorizontalAlignment="Center"  VerticalAlignment="Top" Margin="0,52,0,0"/>
-        <ComboBox Name="GameComboBox" Margin="0,141,0,0" HorizontalAlignment="Center"  VerticalAlignment="Top" Width="120" SelectionChanged="GameComboBox_SelectionChanged" Visibility="Hidden" />
-        <Label Name="GameBoxLabel" Content="Select Game" HorizontalAlignment="Center"  VerticalAlignment="Top" Margin="0,110,0,0" Visibility="Hidden"/>
-        <CheckBox Name="MsiModeCheckBox" Content="MSI Interrupt Mode (Unused)" Margin="128,189,128,189"  />
-        <Button Name="RevertOptimizationButton" Content="Revert" Margin="0,356,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Click="RevertOptimizationButton_Click" Width="70" />
-        <Button Name="ApplyOptimizationButton" Content="Apply" Margin="0,380,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Click="ApplyOptimizationButton_Click" Height="20" Width="70"></Button>
+        <Label Name="OptimizeTypeLabel" Content="Select Optimization Type" HorizontalAlignment="Center"  VerticalAlignment="Top" Margin="0,58,0,0"/>
+        <ComboBox Name="GameComboBox" Margin="0,166,0,0" HorizontalAlignment="Center"  VerticalAlignment="Top" Width="120" SelectionChanged="GameComboBox_SelectionChanged" />
+        <Label Name="GameBoxLabel" Content="Select Game" HorizontalAlignment="Center"  VerticalAlignment="Top" Margin="0,141,0,0" />
+        <CheckBox Name="MsiModeCheckBox" Content="MSI Interrupt Mode (Unused)" HorizontalAlignment="Center" Margin="0,222,0,0" VerticalAlignment="Top"  />
+        <Button Name="RevertOptimizationButton" Content="Revert" Margin="171,371,0,0" VerticalAlignment="Top" Click="RevertOptimizationButton_Click" Height="30" Width="70"/>
+        <Button Name="ApplyOptimizationButton" Content="Apply" Margin="91,371,0,0" VerticalAlignment="Top" Click="ApplyOptimizationButton_Click" Height="30" Width="70" />
+        <Button Name="BackToMainWindowButton" Content="Back" Margin="10,371,0,0" VerticalAlignment="Top" Click="BackToMainWindowButton_Click" Height="30" Width="70"/>
     </Grid>
 </Window>
