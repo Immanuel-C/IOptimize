@@ -21,9 +21,9 @@ workspace "IOptimize"
         objdir ("bin-int/%{prj.name}/%{cfg.buildcfg}")
     end
 
-    startproject "WpfFrontend"
+    startproject "IOptimizeWpfFrontend"
 
-    project "IOptimizedWpfFrontend"
+    project "IOptimizeWpfFrontend"
         targetname "WPFFrontend"
         location "wpfFrontend/"
         language "C#"
