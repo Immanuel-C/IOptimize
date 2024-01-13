@@ -3,7 +3,7 @@ An application to optimize windows for more fps and reduced input latency. Using
 
 ## Warning!
 
-**The IOptimize beta can damage your Windows install, always create a restore point before using the beta**
+**The IOptimize alpha can damage your Windows install, always create a restore point before using the alpha**
 
 ## How to Build 
 
