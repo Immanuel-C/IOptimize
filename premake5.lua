@@ -53,9 +53,11 @@ workspace "IOptimize"
             "System.Xml.Linq",
             "WindowsBase",
             "IOptimize",
+            "Wpf.Ui",
+            "System.Data.DataSetExtensions"
         }
 
-        
+        nuget { "WPF-UI:.1.0" }
 
         defaultBuildLocation()
         defaultBuildCfg()
