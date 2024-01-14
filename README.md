@@ -17,7 +17,7 @@ For Visual Studio 2022 you can then press start and the application will run!
 
 ## How to build The C API
 
-To build the C API you need a compiler that support C17. You must link against 
+To build the C API you need a compiler that supports C17. You must link against 
 - User32
 - Advapi32
 - Cfgmgr32
