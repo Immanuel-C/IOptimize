@@ -3,7 +3,7 @@ An application to optimize windows for more fps and reduced input latency. Using
 
 ## Warning!
 
-**The IOptimize alpha can damage your Windows install, always create a restore point before using the alpha**
+**The IOptimize alpha can damage your Windows install, always create a restore point before using the alpha. IOptimize was also only designed for Windows 10/11 and has not been test on other versions.**
 
 ## How to Build Project
 
