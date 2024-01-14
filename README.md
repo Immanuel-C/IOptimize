@@ -5,7 +5,7 @@ An application to optimize windows for more fps and reduced input latency. Using
 
 **The IOptimize alpha can damage your Windows install, always create a restore point before using the alpha**
 
-## How to Build 
+## How to Build Project
 
 ### **IOptimize is Windows only! Only building on Visual Studio 2022 has been tested!**
 
@@ -14,6 +14,16 @@ To build IOptimize you need a compiler that supports C17, .Net Framework V4.7.2 
 You will also need to install premake5 for the build system. Use premake5 to build to generate to whatever editor/compiler you would like to use. 
 
 For Visual Studio 2022 you can then press start and the application will run!
+
+## How to build The C API
+
+To build the C API you need a compiler that support C17. You must link against 
+- User32
+- Advapi32
+- Cfgmgr32
+- Setupapi
+
+To build as a shared library you must define `IOPTIMIZE_EXPORT_DLL` in the preprocess defines.
 
 ##
 
