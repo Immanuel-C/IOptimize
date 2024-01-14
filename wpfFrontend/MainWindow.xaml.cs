@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,6 +24,10 @@ namespace IOptimizeWPFFrontend
     /// </summary>
     public partial class MainWindow : Window
     {
+        RegistryOptimizationPage registryOptimizatonPage = new RegistryOptimizationPage();
+        ResolutionSwitcherPage resolutionSwitcherPage = new ResolutionSwitcherPage();
+        HomePage homePage = new HomePage();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -29,16 +35,17 @@ namespace IOptimizeWPFFrontend
 
         private void SwitchToRegistryOptimizationPage_Click(object sender, RoutedEventArgs e)
         {
-            RegistryOptimizationWindow window = new RegistryOptimizationWindow(this);
-            window.Show();
-            Visibility = Visibility.Hidden;
+            WindowFrame.Content = registryOptimizatonPage;
         }
 
         private void SwitchToResolutionChangerWindow_Click(object sender, RoutedEventArgs e)
         {
-            ResolutionChangerWindow window = new ResolutionChangerWindow();
-            window.Show();
-            Visibility = Visibility.Hidden;
+            WindowFrame.Content = resolutionSwitcherPage;
+        }
+
+        private void SwitchToHomePage_Click(object sender, RoutedEventArgs e)
+        {
+            WindowFrame.Content = homePage;
         }
     }
 

@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace WPFFrontend
 {
     /// <summary>
-    /// Interaction logic for ResolutionChangerWindow.xaml
+    /// Interaction logic for HomePage.xaml
     /// </summary>
-    public partial class ResolutionChangerWindow : Window
+    public partial class HomePage : Page
     {
-        public ResolutionChangerWindow()
+        public HomePage()
         {
             InitializeComponent();
         }

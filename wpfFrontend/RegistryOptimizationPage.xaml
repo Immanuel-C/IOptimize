@@ -1,0 +1,21 @@
+﻿<Page x:Class="WPFFrontend.RegistryOptimizationPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WPFFrontend"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="540"
+      Title="RegistryOptimizationPage">
+
+    <Grid>
+        <Label Name="TitleLabel" Content="Registry Optimizations" Style="{DynamicResource LabelStyle}" FontSize="24" HorizontalAlignment="Center"  VerticalAlignment="Top" />
+        <ComboBox Name="OptimizeTypeComboBox" Style="{DynamicResource ComboBoxFlatStyle}" HorizontalAlignment="Center"  VerticalAlignment="Top" Width="120" Margin="0,83,0,0" SelectionChanged="OptimizeTypeComboBox_SelectionChanged" />
+        <Label Name="OptimizeTypeLabel" Foreground="White" Content="Select Optimization Type" HorizontalAlignment="Center"  VerticalAlignment="Top" Margin="0,58,0,0"/>
+        <ComboBox Name="GameComboBox" Style="{DynamicResource ComboBoxFlatStyle}" Margin="0,142,0,0" HorizontalAlignment="Center"  VerticalAlignment="Top" Width="120" SelectionChanged="GameComboBox_SelectionChanged" />
+        <Label Name="GameBoxLabel" Foreground="White" Content="Select Game" HorizontalAlignment="Center"  VerticalAlignment="Top" Margin="0,118,0,0" />
+        <CheckBox Name="MsiModeCheckBox" Style="{DynamicResource CheckBoxStyle}" Content="MSI Interrupt Mode (Unused)" HorizontalAlignment="Center" Margin="0,184,0,0" VerticalAlignment="Top"  />
+        <Button Name="ApplyButton" Content="Apply" Style="{DynamicResource ButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10, 0, 0, 10" Click="ApplyOptimizationButton_Click"/>
+        <Button Name="RevertButton" Content="Revert" Style="{DynamicResource ButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="90, 0, 0, 10" Click="RevertOptimizationButton_Click"/>
+    </Grid>
+</Page>

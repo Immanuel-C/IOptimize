@@ -59,5 +59,7 @@ namespace WPFFrontend.Properties {
                 resourceCulture = value;
             }
         }
+        
+
     }
 }

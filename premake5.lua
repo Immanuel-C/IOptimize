@@ -38,6 +38,7 @@ workspace "IOptimize"
             "**.config",
             "**.settings",
             "**.resx",
+            "**.manifest"
         }
 
         links {
@@ -53,11 +54,7 @@ workspace "IOptimize"
             "System.Xml.Linq",
             "WindowsBase",
             "IOptimize",
-            "Wpf.Ui",
-            "System.Data.DataSetExtensions"
         }
-
-        nuget { "WPF-UI:2.1.0" }
 
         defaultBuildLocation()
         defaultBuildCfg()
