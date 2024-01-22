@@ -22,6 +22,9 @@ To build the C API you need a compiler that supports C17. You must link against
 - Advapi32
 - Cfgmgr32
 - Setupapi
+- PowrProf
+- Ntdll
+- Kernel32
 
 To build as a shared library you must define `IOPTIMIZE_EXPORT_DLL` in the preprocess defines.
 
