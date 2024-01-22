@@ -26,27 +26,39 @@ namespace IOptimizeWPFFrontend
     {
         RegistryOptimizationPage registryOptimizatonPage = new RegistryOptimizationPage();
         ResolutionSwitcherPage resolutionSwitcherPage = new ResolutionSwitcherPage();
+        TimerResolutionPage timerResolutionPage = new TimerResolutionPage();
         HomePage homePage = new HomePage();
 
         public MainWindow()
         {
             InitializeComponent();
+            WindowFrame.Content = homePage;
         }
 
         private void SwitchToRegistryOptimizationPage_Click(object sender, RoutedEventArgs e)
         {
             WindowFrame.Content = registryOptimizatonPage;
+            Title = "IOptimize - Registry Optimizations";
         }
 
         private void SwitchToResolutionChangerWindow_Click(object sender, RoutedEventArgs e)
         {
             WindowFrame.Content = resolutionSwitcherPage;
+            Title = "IOptimize - Resolution Switcher";
+        }
+
+        private void SwitchToTimerResolutionPage_Click(object sender, RoutedEventArgs e)
+        {
+            WindowFrame.Content = timerResolutionPage;
+            Title = "IOptimize - Timer Resolution";
         }
 
         private void SwitchToHomePage_Click(object sender, RoutedEventArgs e)
         {
             WindowFrame.Content = homePage;
+            Title = "IOptimize";
         }
+
     }
 
     

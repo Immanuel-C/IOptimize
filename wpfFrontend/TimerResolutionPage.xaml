@@ -1,0 +1,20 @@
+﻿<Page x:Class="WPFFrontend.TimerResolutionPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WPFFrontend"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="540"
+      Title="TimerResolutionPage">
+
+    <Grid>
+        <Label Name="TitleLabel" Content="Timer Resolution" Style="{DynamicResource LabelStyle}" FontSize="24" HorizontalAlignment="Center"  VerticalAlignment="Top" />
+        <Label Name="TimerResolutionLabel" Style="{DynamicResource LabelStyle}" Content="Timer Resolution: " HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0, 100, 0, 0"/>
+        <Button Name="SetMaxResolutionButton" Style="{DynamicResource ButtonStyle}" Width="100" Content="Max Resolution" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0, 150, 0, 0" Click="SetMaxResolutionButton_Click"/>
+        <Button Name="SetMinResolutionButton" Style="{DynamicResource ButtonStyle}" Width="100" Content="Min Resolution" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0, 200, 0, 0" Click="SetMinResolutionButton_Click"/>
+        <Label Style="{DynamicResource LabelStyle}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0, 300, 0, 0" >
+            <TextBlock Style="{DynamicResource TextBoxStyle}" Text="For the timer resolution changes to work you need to be on Windows 11 and have the input delay registry optimizations enabled!" TextWrapping="Wrap"/>
+        </Label>
+    </Grid>
+</Page>

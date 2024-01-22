@@ -24,6 +24,7 @@
                 <MenuItem Header="Home" Style="{DynamicResource MenuItemFlatStyle}" FontSize="17" Margin="0, 0, 0, 0" Click="SwitchToHomePage_Click" />
                 <MenuItem Header="Registry Optimization" Style="{DynamicResource MenuItemFlatStyle}" FontSize="17" Margin="0, 20, 0, 0" Click="SwitchToRegistryOptimizationPage_Click" />
                 <MenuItem Header="Screen Resolution Changer" Style="{DynamicResource MenuItemFlatStyle}" FontSize="17" Margin="0, 20, 0, 0" Click="SwitchToResolutionChangerWindow_Click"/>
+                <MenuItem Header="Timer Resolution" Style="{DynamicResource MenuItemFlatStyle}" FontSize="17" Margin="0, 20, 0, 0" Click="SwitchToTimerResolutionPage_Click"/>
 
             </Menu>
         </StackPanel>

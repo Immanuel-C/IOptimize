@@ -4,6 +4,8 @@
 #include <string.h>
 #include <Windows.h>
 
+
+
 void IOptimizeSetDisplayResolution(int width, int height) {
     RECT oldScreenRes = { 0 };
     GetWindowRect(GetDesktopWindow(), &oldScreenRes);

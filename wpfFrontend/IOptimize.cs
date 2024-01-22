@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace IOptimizeWPFFrontend
 {
-    static public class IOptimizeFunctions 
+    static public class IOptimize 
     {
         [StructLayout(LayoutKind.Explicit)]
         public struct IOptimizeVector2
@@ -22,7 +22,7 @@ namespace IOptimizeWPFFrontend
 
         }
 
-
+        
         [Flags]
         public enum IOptimizeTypeFlags
         {
@@ -45,5 +45,16 @@ namespace IOptimizeWPFFrontend
 
         [DllImport("IOptimize.dll")]
         public static extern void IOptimizeSetDisplayResolution(int width, int height);
+
+        [DllImport("IOptimize.dll")]
+        public static extern void IOptimizeSetTimerResolution(UInt32 resolutionMs);
+
+        public struct TimerResolutionValues
+        {
+            public UInt32 maxResolution, minResolution, currResolution;
+        }
+
+        [DllImport("IOptimize.dll")]
+        public static extern TimerResolutionValues IOptimizeQueryTimerResolution();
     }
 }

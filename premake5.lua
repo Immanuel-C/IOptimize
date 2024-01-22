@@ -58,27 +58,57 @@ workspace "IOptimize"
 
         defaultBuildLocation()
         defaultBuildCfg()
-    
+
+        project "IOptimizeTest"
+            location "test"
+            kind "ConsoleApp"
+            language "C"
+            cdialect "C17"
+
+            files {"%{prj.location}/**.c", "%{prj.location}/**.h"}
+
+            includedirs { "src", "%{prj.location}" }
+
+            links { "User32", "Advapi32", "Cfgmgr32", "Setupapi", "PowrProf", "Ntdll", "IOptimize", "Kernel32" } 
+
+            defaultBuildLocation()
+
+            defaultBuildCfg()
+
         project "IOptimize"
             location "src"
             kind "SharedLib"
             language "C"
             cdialect "C17"
 
-            files {"%{prj.location}/**.c", "%{prj.location}/**.h"}
+            files {
+                "%{prj.location}/**.c", 
+                "%{prj.location}/**.h",
+            }
+
+            removefiles {
+                "**.g.cs",
+                "**.g.i.cs",
+                ".NETFramework,Version=v4.7.2.AssemblyAttributes.cs",
+                ".NETFramework,Version=v4.8.0.AssemblyAttributes.cs",
+            }
 
             includedirs { "src" }
 
-            links { "User32", "Advapi32", "Cfgmgr32", "Setupapi" } 
+            links { "User32", "Advapi32", "Cfgmgr32", "Setupapi", "PowrProf", "Ntdll", "Kernel32" } 
 
             postbuildcommands { "copy ..\\bin\\%{prj.name}\\%{cfg.buildcfg}\\IOptimize.dll ..\\bin\\IOptimizeWpfFrontend\\%{cfg.buildcfg}" }
-
-            defaultBuildLocation()
+            postbuildcommands { "copy ..\\bin\\%{prj.name}\\%{cfg.buildcfg}\\IOptimize.dll ..\\bin\\IOptimizeTest\\%{cfg.buildcfg}" }
 
             defines { "IOPTIMIZE_EXPORT_DLL" }
+
+            targetname "IOptimize"
+            
+            defaultBuildLocation()
 
             filter "configurations:Debug"
                debuggertype "Mixed"
 
             defaultBuildCfg()
+
 

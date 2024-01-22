@@ -48,25 +48,25 @@ namespace WPFFrontend
                 "None"
             };
 
-            IOptimizeFunctions.IOptimizeTypeFlags optimizeTypeFlags = new IOptimizeFunctions.IOptimizeTypeFlags();
-            IOptimizeFunctions.IOptimizeTypeFlags gameOptimizeTypeFlags = new IOptimizeFunctions.IOptimizeTypeFlags();
+            IOptimize.IOptimizeTypeFlags optimizeTypeFlags = new IOptimize.IOptimizeTypeFlags();
+            IOptimize.IOptimizeTypeFlags gameOptimizeTypeFlags = new IOptimize.IOptimizeTypeFlags();
 
 
 
             private void OptimizeTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
             {
-                if (optimizeTypeFlags != IOptimizeFunctions.IOptimizeTypeFlags.None)
-                    optimizeTypeFlags = new IOptimizeFunctions.IOptimizeTypeFlags();
+                if (optimizeTypeFlags != IOptimize.IOptimizeTypeFlags.None)
+                    optimizeTypeFlags = new IOptimize.IOptimizeTypeFlags();
 
                 switch (OptimizeTypeComboBox.SelectedValue)
                 {
                     case "FPS":
-                        optimizeTypeFlags |= IOptimizeFunctions.IOptimizeTypeFlags.FPS;
+                        optimizeTypeFlags |= IOptimize.IOptimizeTypeFlags.FPS;
                         GameBoxLabel.Visibility = Visibility.Visible;
                         GameComboBox.Visibility = Visibility.Visible;
                         break;
                     case "Input Latency":
-                        optimizeTypeFlags |= IOptimizeFunctions.IOptimizeTypeFlags.Latency;
+                        optimizeTypeFlags |= IOptimize.IOptimizeTypeFlags.Latency;
                         GameBoxLabel.Visibility = Visibility.Hidden;
                         GameComboBox.Visibility = Visibility.Hidden;
                         break;
@@ -78,19 +78,19 @@ namespace WPFFrontend
 
             private void GameComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
             {
-                if (gameOptimizeTypeFlags != IOptimizeFunctions.IOptimizeTypeFlags.None)
-                    gameOptimizeTypeFlags = new IOptimizeFunctions.IOptimizeTypeFlags();
+                if (gameOptimizeTypeFlags != IOptimize.IOptimizeTypeFlags.None)
+                    gameOptimizeTypeFlags = new IOptimize.IOptimizeTypeFlags();
 
                 switch (GameComboBox.SelectedValue)
                 {
                     case "Fortnite":
-                        gameOptimizeTypeFlags |= IOptimizeFunctions.IOptimizeTypeFlags.Fortnite;
+                        gameOptimizeTypeFlags |= IOptimize.IOptimizeTypeFlags.Fortnite;
                         break;
                     case "Apex Legends":
-                        gameOptimizeTypeFlags |= IOptimizeFunctions.IOptimizeTypeFlags.ApexLegends;
+                        gameOptimizeTypeFlags |= IOptimize.IOptimizeTypeFlags.ApexLegends;
                         break;
                     case "None":
-                        gameOptimizeTypeFlags = IOptimizeFunctions.IOptimizeTypeFlags.None;
+                        gameOptimizeTypeFlags = IOptimize.IOptimizeTypeFlags.None;
                         break;
                     default:
                         break;
@@ -101,29 +101,29 @@ namespace WPFFrontend
             {
                 if (MsiModeCheckBox.IsChecked == true)
                 {
-                    IOptimizeFunctions.IOptimizeSetGpuMsiMode(1);
+                    IOptimize.IOptimizeSetGpuMsiMode(1);
                 }
 
-                if (optimizeTypeFlags == IOptimizeFunctions.IOptimizeTypeFlags.None)
+                if (optimizeTypeFlags == IOptimize.IOptimizeTypeFlags.None)
                 {
                     MessageBox.Show("You need to set an optimization type!", "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
 
 
-                if (gameOptimizeTypeFlags == IOptimizeFunctions.IOptimizeTypeFlags.None)
+                if (gameOptimizeTypeFlags == IOptimize.IOptimizeTypeFlags.None)
                 {
-                    IOptimizeFunctions.IOptimizeSetRegistryTweaks(optimizeTypeFlags);
+                    IOptimize.IOptimizeSetRegistryTweaks(optimizeTypeFlags);
                     return;
                 }
 
-                IOptimizeFunctions.IOptimizeSetRegistryTweaks(optimizeTypeFlags | gameOptimizeTypeFlags);
+                IOptimize.IOptimizeSetRegistryTweaks(optimizeTypeFlags | gameOptimizeTypeFlags);
 
             }
 
             private void RevertOptimizationButton_Click(object sender, RoutedEventArgs e)
             {
-                IOptimizeFunctions.IOptimizeSetGpuMsiMode(0);
-                IOptimizeFunctions.IOptimizeSetRegistryTweaks(IOptimizeFunctions.IOptimizeTypeFlags.Revert);
+                IOptimize.IOptimizeSetGpuMsiMode(0);
+                IOptimize.IOptimizeSetRegistryTweaks(IOptimize.IOptimizeTypeFlags.Revert);
             }
 
 
