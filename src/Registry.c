@@ -8,37 +8,37 @@
 #include <tlhelp32.h>
 #include <stdlib.h>
 
-struct _IOptimizeSetRegistryDwordValuesInfo {
+typedef struct _IOptimizeSetRegistryDwordValuesInfo_T {
     HKEY hKey;
     LPCSTR subKey;
     const char** valueNames;
     size_t valueNamesSize;
     const DWORD* valueData;
     DWORD cbSizePerIndex;
-};
+} _IOptimizeSetRegistryDwordValuesInfo;
 
-struct _IOptimizeDeleteRegistryValuesInfo {
+typedef struct _IOptimizeDeleteRegistryValuesInfo_T {
     HKEY hKey;
     LPCSTR subKey;
     const char** valueNames;
     size_t valueNamesSize;
 
-};
+} _IOptimizeDeleteRegistryValuesInfo;
 
-static void _IOptimizeSetRegistryDwordValues(struct _IOptimizeSetRegistryDwordValuesInfo* info) {
+static void _IOptimizeSetRegistryDwordValues( _IOptimizeSetRegistryDwordValuesInfo* info) {
     HKEY key;
     LRESULT result = 0;
 
-    result = RegCreateKeyExA(info->hKey, info->subKey, NULL, NULLPTR, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULLPTR, &key, NULLPTR);
+    result = RegCreateKeyExA(info->hKey, info->subKey, 0, NULLPTR, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULLPTR, &key, NULLPTR);
     if (result != ERROR_SUCCESS) {
         char info[512] = { 0 };
-        vsprintf(info, "RegCreateKeyEx failed\nError Code: %i", result);
+        sprintf_s(info, 512, "RegCreateKeyEx failed\nError Code: %i", result);
         MessageBoxA(NULL, info, "Error!", MB_OK);
         return;
     }
 
     for (size_t i = 0; i < info->valueNamesSize; i++) {
-        result = RegSetValueExA(key, info->valueNames[i], NULL, REG_DWORD, (LPBYTE)&info->valueData[i], info->cbSizePerIndex);
+        result = RegSetValueExA(key, info->valueNames[i], 0, REG_DWORD, (LPBYTE)&info->valueData[i], info->cbSizePerIndex);
         if (result != ERROR_SUCCESS) {
             MessageBoxA(NULL, "RegSetValueExA failed", "Error!", MB_OK);
             return;
@@ -48,13 +48,13 @@ static void _IOptimizeSetRegistryDwordValues(struct _IOptimizeSetRegistryDwordVa
     RegCloseKey(key);
 }
 
-static void _IOptimizeDeleteRegistryValues(struct _IOptimizeDeleteRegistryValuesInfo* info) {
+static void _IOptimizeDeleteRegistryValues( _IOptimizeDeleteRegistryValuesInfo* info) {
     HKEY key;
     LRESULT result;
-    result = RegCreateKeyExA(info->hKey, info->subKey, NULL, NULLPTR, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULLPTR, &key, NULLPTR);
+    result = RegCreateKeyExA(info->hKey, info->subKey, 0, NULLPTR, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULLPTR, &key, NULLPTR);
     if (result != ERROR_SUCCESS) {
         char info[512] = { 0 };
-        vsprintf_s(info, 512, "RegCreateKeyEx failed\nError Code: %i", result);
+        sprintf_s(info, 512, "RegCreateKeyEx failed\nError Code: %i", result);
         MessageBoxA(NULL, info, "Error!", MB_OK);
         return;
     }
@@ -69,7 +69,7 @@ static int _IOptimizeCheckInstances(int maxInstanceCount, const wchar_t* process
 
     HANDLE snapShot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 
-    if (snapShot == INVALID_HANDLE_VALUE) return;
+    if (snapShot == INVALID_HANDLE_VALUE) return 2;
 
     PROCESSENTRY32 processEntry = { 0 };
     processEntry.dwSize = sizeof(PROCESSENTRY32);
@@ -110,11 +110,11 @@ void IOptimizeSetGpuMsiMode(int msi) {
         const char* fakeInstanceId = '\0';
         SetupDiGetDeviceInstanceIdA(hDevInfo, &deviceInfoData, (PBYTE)fakeInstanceId, 1, &reqBufsize);
 
-        const char* subKey = malloc(reqBufsize + 256);
+        char* subKey = malloc(reqBufsize + 256);
         size_t subKeySize = reqBufsize + 256;
         memset(subKey, 0, subKeySize);
 
-        const char* instanceId = malloc(reqBufsize);
+        char* instanceId = malloc(reqBufsize);
         DWORD instanceIdSize = reqBufsize;
         memset(instanceId, 0, instanceIdSize);
 
@@ -137,7 +137,7 @@ void IOptimizeSetGpuMsiMode(int msi) {
         if (msi) {
             DWORD valueData = 0x00000001;
 
-            struct _IOptimizeSetRegistryDwordValuesInfo setMsiModeRegistryValue = {
+             _IOptimizeSetRegistryDwordValuesInfo setMsiModeRegistryValue = {
                 .hKey = HKEY_LOCAL_MACHINE,
                 .subKey = subKey,
                 .valueNames = &valueName,
@@ -151,7 +151,7 @@ void IOptimizeSetGpuMsiMode(int msi) {
         else if (!msi) {
             DWORD valueData = 0x00000000;
 
-            struct _IOptimizeSetRegistryDwordValuesInfo setMsiModeRegistryValue = {
+             _IOptimizeSetRegistryDwordValuesInfo setMsiModeRegistryValue = {
                 .hKey = HKEY_LOCAL_MACHINE,
                 .subKey = subKey,
                 .valueNames = &valueName,
@@ -200,7 +200,7 @@ void IOptimizeSetRegistryTweaks(IOptimizeTypeFlags optimizeType) {
 
     if (optimizeType & IOPTIMIZE_TYPE_LATENCY) {
         {
-            struct _IOptimizeSetRegistryDwordValuesInfo setRegistryInfo = {
+             _IOptimizeSetRegistryDwordValuesInfo setRegistryInfo = {
                 .hKey = HKEY_LOCAL_MACHINE,
                 .subKey = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\csrss.exe\\PerfOptions",
                 .valueNames = valueNamesPriorities,
@@ -212,7 +212,7 @@ void IOptimizeSetRegistryTweaks(IOptimizeTypeFlags optimizeType) {
             _IOptimizeSetRegistryDwordValues(&setRegistryInfo);
         }
         {
-            struct _IOptimizeSetRegistryDwordValuesInfo setRegistryInfo = {
+             _IOptimizeSetRegistryDwordValuesInfo setRegistryInfo = {
                 .hKey = HKEY_LOCAL_MACHINE,
                 .subKey = "SYSTEM\\ControlSet001\\Control\\PriorityControl",
                 .valueNames = &priorityControlValueNames,
@@ -224,7 +224,7 @@ void IOptimizeSetRegistryTweaks(IOptimizeTypeFlags optimizeType) {
             _IOptimizeSetRegistryDwordValues(&setRegistryInfo);
         }
         {
-            struct _IOptimizeSetRegistryDwordValuesInfo setRegistryInfo = {
+             _IOptimizeSetRegistryDwordValuesInfo setRegistryInfo = {
                 .hKey = HKEY_LOCAL_MACHINE,
                 .subKey = "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\kernel",
                 .valueNames = &globalTimerResolutionRequestsName,
@@ -261,7 +261,7 @@ void IOptimizeSetRegistryTweaks(IOptimizeTypeFlags optimizeType) {
 
     if (optimizeType & IOPTIMIZE_TYPE_FPS ) {
         {
-            struct _IOptimizeSetRegistryDwordValuesInfo setRegistryInfo = {
+             _IOptimizeSetRegistryDwordValuesInfo setRegistryInfo = {
                 .hKey = HKEY_LOCAL_MACHINE,
                 .subKey = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile",
                 .valueNames = multimediaValueNames,
@@ -273,7 +273,7 @@ void IOptimizeSetRegistryTweaks(IOptimizeTypeFlags optimizeType) {
             _IOptimizeSetRegistryDwordValues(&setRegistryInfo);
         }
         {
-            struct _IOptimizeSetRegistryDwordValuesInfo setRegistryInfo = {
+             _IOptimizeSetRegistryDwordValuesInfo setRegistryInfo = {
                 .hKey = HKEY_LOCAL_MACHINE,
                 .subKey = "SYSTEM\\ControlSet001\\Services\\kbdclass\\Parameters",
                 .valueNames = &queueSizeValueNames[0],
@@ -292,7 +292,7 @@ void IOptimizeSetRegistryTweaks(IOptimizeTypeFlags optimizeType) {
 
 
         if (optimizeType & IOPTIMIZE_TYPE_FORTNITE) {
-            struct _IOptimizeSetRegistryDwordValuesInfo setRegistryInfo = {
+             _IOptimizeSetRegistryDwordValuesInfo setRegistryInfo = {
                 .hKey = HKEY_LOCAL_MACHINE,
                 .subKey = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\FortniteClient-Win64-Shipping.exe\\PerfOptions",
                 .valueNames = valueNamesPriorities,
@@ -304,7 +304,7 @@ void IOptimizeSetRegistryTweaks(IOptimizeTypeFlags optimizeType) {
             _IOptimizeSetRegistryDwordValues(&setRegistryInfo);
         }
         if (optimizeType & IOPTIMIZE_TYPE_APEX_LEGENDS) {
-            struct _IOptimizeSetRegistryDwordValuesInfo setRegistryInfo = {
+             _IOptimizeSetRegistryDwordValuesInfo setRegistryInfo = {
                 .hKey = HKEY_LOCAL_MACHINE,
                 .subKey = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\r5apex.exe\\PerfOptions",
                 .valueNames = valueNamesPriorities,
@@ -324,7 +324,7 @@ void IOptimizeSetRegistryTweaks(IOptimizeTypeFlags optimizeType) {
     
 
     if (optimizeType & IOPTIMIZE_TYPE_REVERT) {
-        struct _IOptimizeDeleteRegistryValuesInfo removeRegistryInfo = {
+         _IOptimizeDeleteRegistryValuesInfo removeRegistryInfo = {
             .hKey = HKEY_LOCAL_MACHINE,
             .subKey = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\csrss.exe\\PerfOptions",
             .valueNames = valueNamesPriorities,
@@ -348,7 +348,7 @@ void IOptimizeSetRegistryTweaks(IOptimizeTypeFlags optimizeType) {
                 0xA,
             };
 
-            struct _IOptimizeSetRegistryDwordValuesInfo setRegistryInfo = {
+             _IOptimizeSetRegistryDwordValuesInfo setRegistryInfo = {
                 .hKey = HKEY_LOCAL_MACHINE,
                 .subKey = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile",
                 .valueNames = multimediaValueNames,
@@ -362,7 +362,7 @@ void IOptimizeSetRegistryTweaks(IOptimizeTypeFlags optimizeType) {
 
             queueSizeValueData = 0x64;
 
-            struct _IOptimizeSetRegistryDwordValuesInfo setRegistryInfo = {
+             _IOptimizeSetRegistryDwordValuesInfo setRegistryInfo = {
                 .hKey = HKEY_LOCAL_MACHINE,
                 .subKey = "SYSTEM\\ControlSet001\\Services\\kbdclass\\Parameters",
                 .valueNames = &queueSizeValueNames[0],
@@ -380,7 +380,7 @@ void IOptimizeSetRegistryTweaks(IOptimizeTypeFlags optimizeType) {
         }
         {
             priorityControlValueData = 0x2;
-            struct _IOptimizeSetRegistryDwordValuesInfo setRegistryInfo = {
+             _IOptimizeSetRegistryDwordValuesInfo setRegistryInfo = {
                 .hKey = HKEY_LOCAL_MACHINE,
                 .subKey = "SYSTEM\\ControlSet001\\Control\\PriorityControl",
                 .valueNames = &priorityControlValueNames,
@@ -393,7 +393,7 @@ void IOptimizeSetRegistryTweaks(IOptimizeTypeFlags optimizeType) {
         }
         {
             globalTimerResolutionRequestsValue = 0x0;
-            struct _IOptimizeSetRegistryDwordValuesInfo setRegistryInfo = {
+             _IOptimizeSetRegistryDwordValuesInfo setRegistryInfo = {
                 .hKey = HKEY_LOCAL_MACHINE,
                 .subKey = "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\kernel",
                 .valueNames = &globalTimerResolutionRequestsName,
@@ -410,16 +410,16 @@ void IOptimizeSetRegistryTweaks(IOptimizeTypeFlags optimizeType) {
 extern NTSYSAPI NTSTATUS NTAPI NtQueryTimerResolution(PULONG MinimumResolution, PULONG MaximumResolution, PULONG CurrentResolution);
 extern NTSYSAPI NTSTATUS NTAPI NtSetTimerResolution(ULONG DesiredResolution, BOOLEAN SetResolution, PULONG CurrentResolution);
 
-struct IOptimizeTimerResolutionValues IOptimizeQueryTimerResolution() {
+IOptimizeTimerResolutionValues IOptimizeQueryTimerResolution() {
     ULONG minResolution, maxResolution, currResolution;
 
     if (NtQueryTimerResolution(&minResolution, &maxResolution, &currResolution)) {
         MessageBoxA(NULLPTR, "NtQueryTimerResolution failed!", "Error!", MB_OK | MB_ICONERROR);
-        struct IOptimizeTimerResolutionValues failed = { 0, 0, 0 };
+        IOptimizeTimerResolutionValues failed = { 0, 0, 0 };
         return failed;
     }
 
-    struct IOptimizeTimerResolutionValues values = {
+    IOptimizeTimerResolutionValues values = {
         .minResolution  = minResolution,
         .maxResolution  = maxResolution,
         .currResolution = currResolution
@@ -448,7 +448,7 @@ void IOptimizeSetTimerResolution(uint32_t resolutionMs) {
 
     SetProcessInformation(GetCurrentProcess(), ProcessPowerThrottling, &powerThrottling, sizeof(PROCESS_POWER_THROTTLING_STATE));
 
-    struct IOptimizeTimerResolutionValues values = IOptimizeQueryTimerResolution();
+    IOptimizeTimerResolutionValues values = IOptimizeQueryTimerResolution();
 
 
     if (NtSetTimerResolution(resolutionMs, TRUE, &values.currResolution)) {
@@ -459,113 +459,145 @@ void IOptimizeSetTimerResolution(uint32_t resolutionMs) {
     printf("Timer resolution set to: %.4f\n", ((double)values.currResolution / 10000.0));
 }
 
-
-struct _TimerResoltionDelta {
-    int resolution;
+typedef struct _IOptimizeTimerResoltionDelta_T {
+    uint32_t resolution;
     double averageDelta;
-};
+} _IOptimizeTimerResoltionDelta;
 
-int cmpfunc(const void* a, const void* b) {
 
-    return (*(struct _TimerResoltionDelta*)a).averageDelta - (*(struct _TimerResoltionDelta*)b).averageDelta;
+static IOptimizeBool _IOptimizeBenchmarkTimerResolution(double* averageDeltaFromSleep, uint32_t samples, uint32_t sleepTimeBetweenQueries, uint32_t* minRes, uint32_t* maxRes, uint32_t* currentRes) {
+    IOPTIMIZE_ASSERT(sleepTimeBetweenQueries > 0, "_IOptimizeBenchmarkTimerResolution() param sleepTimeBetweenQueries must be higher than 0!");
+    IOPTIMIZE_ASSERT(samples > 1, "_IOptimizeBenchmarkTimerResolution() param samples must be higher than 1!");
+
+    LARGE_INTEGER start, end, freq;
+    QueryPerformanceFrequency(&freq);
+
+    if (!SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS)) {
+        IOptimizeLogErr("SetPriorityClass failed! Failed to set process priority to realtime.\n");
+        return IOPTIMIZE_FALSE;
+    }
+
+    ULONG minResolution, maxResolution, currentResolution;
+
+    size_t sleepDeltasSize = (size_t)samples + 1;
+    double* sleepDeltas = (double*)malloc(sizeof(double) * sleepDeltasSize);
+
+    if (sleepDeltas == NULLPTR) {
+        IOptimizeLogErr("Malloc failed!\n");
+        return IOPTIMIZE_FALSE;
+    }
+
+    for (uint32_t i = 0; i < sleepDeltasSize; i++) {
+        if (NtQueryTimerResolution(&minResolution, &maxResolution, &currentResolution) != 0) {
+            IOptimizeLogErr("NtQueryTimerResolution failed!\n");
+            return IOPTIMIZE_FALSE;
+        }
+
+        QueryPerformanceCounter(&start);
+        Sleep(sleepTimeBetweenQueries);
+        QueryPerformanceCounter(&end);
+
+        double deltaSeconds = (double)(end.QuadPart - start.QuadPart) / freq.QuadPart;
+        double deltaMs = deltaSeconds * 1000;
+        double deltaFromSleep = deltaMs - 1;
+
+        sleepDeltas[i] = deltaFromSleep;
+
+        Sleep(100);
+    }
+
+    // Discard first samples since almost invalid.
+    size_t sleepDeltasNewsize = (size_t)sleepDeltasSize - 1;
+
+    double sum = 0.0;
+
+    for (uint32_t i = 1; i < sleepDeltasNewsize; i++) 
+        sum += sleepDeltas[i];
+    
+    (*averageDeltaFromSleep) = sum / sleepDeltasNewsize;
+
+    if (minRes != NULLPTR) 
+        (*minRes) = (uint32_t)minResolution;
+    if (maxRes != NULLPTR)
+        (*maxRes) = (uint32_t)maxResolution;
+    if (currentRes != NULLPTR)
+        (*currentRes) = (uint32_t)currentResolution;
+
+    free(sleepDeltas);
+
+    return IOPTIMIZE_TRUE;
+}
+
+static int _IOptimizeTimerResoltionDeltaCmpFun(const void* a, const void* b) {
+    const _IOptimizeTimerResoltionDelta* ta = (_IOptimizeTimerResoltionDelta*)a;
+    const _IOptimizeTimerResoltionDelta* tb = (_IOptimizeTimerResoltionDelta*)b;
+
+    if (ta->averageDelta > tb->averageDelta) return 1;
+    else if (ta->averageDelta < tb->averageDelta) return -1;
+    else return 0;
 }
 
 // Credit to amitxv 
 // https://github.com/amitxv/TimerResolution/blob/main/micro-adjust-benchmark.ps1
 // https://github.com/amitxv/PC-Tuning/blob/main/docs/research.md#micro-adjusting-timer-resolution-for-higher-precision
-uint32_t IOptimizeMicroAdjustTimerResolution() {
-    uint32_t start = 5000, end = 8000, increment = 20, samples = 20;
+uint32_t IOptimizeMicroAdjustTimerResolution(uint32_t start, uint32_t end, uint32_t increment, uint32_t samples, uint32_t sleepTimeBetweenQueries) {
+    {
+        ULONG minResolution, maxResolution, currentResolution;
+
+        if (NtQueryTimerResolution(&minResolution, &maxResolution, &currentResolution) != 0) {
+            IOptimizeLogErr("NtQueryTimerResolution failed!\n");
+            return IOPTIMIZE_FALSE;
+        }
+
+        IOPTIMIZE_ASSERT(start >= maxResolution, "IOptimizeMicroAdjustTimerResolution param start must be higher or equal than the max timer resolution");
+        IOPTIMIZE_ASSERT(end <= minResolution, "IOptimizeMicroAdjustTimerResolution param end must be lower or equal than the min timer resolution");
+    }
 
     LARGE_INTEGER freq;
     QueryPerformanceFrequency(&freq);
 
-
     if (!SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS)) {
-        printf("SetPriorityClass failed!\n");
+        IOptimizeLogErr("SetPriorityClass failed! Failed to set process priority to realtime.\n");
         return 0;
     }
 
-    size_t resolutionDeltasSize = (end - start) / increment;
-    struct _TimerResoltionDelta* resolutionDeltas = malloc(resolutionDeltasSize);
-    if (!resolutionDeltas) {
-        printf("Malloc failed!");
+    size_t timerResolutionDeltasSize = (size_t)((double)(end - start) / increment);
+    _IOptimizeTimerResoltionDelta* timerResolutionDeltas = (_IOptimizeTimerResoltionDelta*)malloc(sizeof(_IOptimizeTimerResoltionDelta) * timerResolutionDeltasSize);
+
+    if (timerResolutionDeltas == NULLPTR) {
+        IOptimizeLogErr("malloc failed!\n");
         return 0;
     }
 
-    int index = 0;
-    for (int i = start; i < end; i += increment) {
-        printf("Benchmarking: %.4f\n", (float)i);
+    for (uint32_t desiredResolution = start, i = 0; desiredResolution < end; desiredResolution += increment, i++) {
+        ULONG currResolution;
+        NtSetTimerResolution((ULONG)desiredResolution, TRUE, &currResolution);
 
-        LARGE_INTEGER start, end;
+        IOptimizeLog("Benchmarking timer resolution: %u, actual timer resolution: %u (samples: %u)\n", desiredResolution, (uint32_t)currResolution, samples);
 
-        IOptimizeSetTimerResolution((uint32_t)i);
-
-        Sleep(1);
-
-        //double* samplesDelta = malloc(samples);
-        double samplesDelta[20] = { 0 };
-        if (!samplesDelta) {
-            printf("Malloc failed!");
+        double averageDeltaFromSleep;
+        if (_IOptimizeBenchmarkTimerResolution(&averageDeltaFromSleep, samples, sleepTimeBetweenQueries, NULLPTR, NULLPTR, NULLPTR) == IOPTIMIZE_FALSE) {
+            IOptimizeLogErr("_IOptimizeBenchmarkTimerResolution failed!");
             return 0;
         }
 
-        for (int y = 0;; y++) {
-            QueryPerformanceCounter(&start);
-            Sleep(1);
-            QueryPerformanceCounter(&end);
+        IOptimizeLog("Average delta from Sleep(%u): %0.4f\n", sleepTimeBetweenQueries, averageDeltaFromSleep);
 
-            double deltaSeconds = (double)(end.QuadPart - start.QuadPart) / freq.QuadPart;
-            double deltaMiliSeconds = deltaSeconds * 1000;
-            double deltaExtraTimeSlept = deltaMiliSeconds - 1;
-
-            samplesDelta[y] = deltaExtraTimeSlept;
-
-            if (y == samples) break;
-
-            Sleep(100);
-        }
-
-        // first trial is almost always invalid. Disacard.
-        size_t size = samples - 1;
-
-        //double* samplesDeltaNew = malloc(size);
-        double samplesDeltaNew[19] = { 0 };
-        if (!samplesDeltaNew) {
-            printf("Malloc failed!");
-            return 0;
-        }
-
-        memcpy(samplesDeltaNew, samplesDelta + 1, size * sizeof(double));
-
-        double sum = 0.0;
-
-        for (int y = 0; y < size; y++) 
-            sum += samplesDeltaNew[y];
-
-        double average = sum / size;
-
-        struct _TimerResoltionDelta resolutionDelta = {
-            .resolution = i,
-            .averageDelta = average,
+        _IOptimizeTimerResoltionDelta timerResolutionDelta = {
+            .resolution = desiredResolution,
+            .averageDelta = averageDeltaFromSleep
         };
 
-        resolutionDeltas[index] = resolutionDelta;
-        
-        index++;
-
-        //free(samplesDelta);
-        //free(samplesDeltaNew);
+        timerResolutionDeltas[i] = timerResolutionDelta;
     }
 
+    qsort(timerResolutionDeltas, timerResolutionDeltasSize, sizeof(_IOptimizeTimerResoltionDelta), _IOptimizeTimerResoltionDeltaCmpFun);
 
-    qsort(resolutionDeltas, resolutionDeltasSize, sizeof(struct _TimerResoltionDelta), cmpfunc);
+    IOptimizeLog("Chosen timer resolution: %u, Average delta from Sleep(%u): %0.4f\n", timerResolutionDeltas[0].resolution, sleepTimeBetweenQueries, timerResolutionDeltas[0].averageDelta);
 
-    uint32_t newResolution = resolutionDeltas[0].resolution;
+    uint32_t chosenResolution = timerResolutionDeltas[0].resolution;
 
-    free(resolutionDeltas);
+    free(timerResolutionDeltas);
 
-    printf("New Resolution: %f.4ms\n", (float)(newResolution / 10000.0));
-
-    return newResolution;
-
+    return chosenResolution;
 }
