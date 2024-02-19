@@ -499,7 +499,7 @@ static IOptimizeBool _IOptimizeBenchmarkTimerResolution(double* averageDeltaFrom
 
         double deltaSeconds = (double)(end.QuadPart - start.QuadPart) / freq.QuadPart;
         double deltaMs = deltaSeconds * 1000;
-        double deltaFromSleep = deltaMs - 1;
+        double deltaFromSleep = deltaMs - sleepTimeBetweenQueries;
 
         sleepDeltas[i] = deltaFromSleep;
 
@@ -573,7 +573,7 @@ uint32_t IOptimizeMicroAdjustTimerResolution(uint32_t start, uint32_t end, uint3
         ULONG currResolution;
         NtSetTimerResolution((ULONG)desiredResolution, TRUE, &currResolution);
 
-        IOptimizeLog("Benchmarking timer resolution: %u, actual timer resolution: %u (samples: %u)\n", desiredResolution, (uint32_t)currResolution, samples);
+        IOptimizeLog("Benchmarking timer resolution: %u, samples: %u\n", desiredResolution, samples);
 
         double averageDeltaFromSleep;
         if (_IOptimizeBenchmarkTimerResolution(&averageDeltaFromSleep, samples, sleepTimeBetweenQueries, NULLPTR, NULLPTR, NULLPTR) == IOPTIMIZE_FALSE) {
