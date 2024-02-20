@@ -52,7 +52,9 @@ IOPTIMIZE_API IOptimizeTimerResolutionValues IOptimizeQueryTimerResolution();
 * @param start a uint32_t that is the start of the micro adjusting. Must be greater or equal to the max timer resolution returned by IOptimizeQueryTimerResolution().
 * @param end a uint32_t that is the end of the micro adjusting. Must be less than or equal to the min timer resolution returned by IOptimizeQueryTimerResolution().
 * @param increment a uint32_t that is added to start until it reaches end. Each time this is added the function will benchmark the resolution.
-* @param samples a uint32_t that defines how many times we should benchmark each resolution. The higher the samples the longer the benchmark will be but the more acurate the results will be.
+* @param samples a uint32_t that defines how many times we should benchmark each resolution. The higher the samples the longer the benchmark will be but the more accurate the results will be.
+* 
+* @return the best timer resolution.
 */
 IOPTIMIZE_API uint32_t IOptimizeMicroAdjustTimerResolution(uint32_t start, uint32_t end, uint32_t increment, uint32_t samples);
 
