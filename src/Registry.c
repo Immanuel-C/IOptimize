@@ -89,6 +89,8 @@ static int _IOptimizeCheckInstances(int maxInstanceCount, const wchar_t* process
 
 // TODO: Complete function
 void IOptimizeSetGpuMsiMode(int msi) {
+    IOPTIMIZE_ASSERT(msi == 1 || msi == 0, "IOptimizeSetGpuMsiMode() param msi is a boolean type and must be either 0 (false), 1 (true)!");
+
     int result;
     
     HDEVINFO hDevInfo = SetupDiGetClassDevs(
@@ -540,7 +542,7 @@ static int _IOptimizeTimerResoltionDeltaCmpFun(const void* a, const void* b) {
 // Credit to amitxv 
 // https://github.com/amitxv/TimerResolution/blob/main/micro-adjust-benchmark.ps1
 // https://github.com/amitxv/PC-Tuning/blob/main/docs/research.md#micro-adjusting-timer-resolution-for-higher-precision
-uint32_t IOptimizeMicroAdjustTimerResolution(uint32_t start, uint32_t end, uint32_t increment, uint32_t samples, uint32_t sleepTimeBetweenQueries) {
+uint32_t IOptimizeMicroAdjustTimerResolution(uint32_t start, uint32_t end, uint32_t increment, uint32_t samples) {
     {
         ULONG minResolution, maxResolution, currentResolution;
 
@@ -576,12 +578,12 @@ uint32_t IOptimizeMicroAdjustTimerResolution(uint32_t start, uint32_t end, uint3
         IOptimizeLog("Benchmarking timer resolution: %u, samples: %u\n", desiredResolution, samples);
 
         double averageDeltaFromSleep;
-        if (_IOptimizeBenchmarkTimerResolution(&averageDeltaFromSleep, samples, sleepTimeBetweenQueries, NULLPTR, NULLPTR, NULLPTR) == IOPTIMIZE_FALSE) {
+        if (_IOptimizeBenchmarkTimerResolution(&averageDeltaFromSleep, samples, 1, NULLPTR, NULLPTR, NULLPTR) == IOPTIMIZE_FALSE) {
             IOptimizeLogErr("_IOptimizeBenchmarkTimerResolution failed!");
             return 0;
         }
 
-        IOptimizeLog("Average delta from Sleep(%u): %0.4f\n", sleepTimeBetweenQueries, averageDeltaFromSleep);
+        IOptimizeLog("Average delta from Sleep(%u): %0.4f\n", 1, averageDeltaFromSleep);
 
         _IOptimizeTimerResoltionDelta timerResolutionDelta = {
             .resolution = desiredResolution,
@@ -593,7 +595,7 @@ uint32_t IOptimizeMicroAdjustTimerResolution(uint32_t start, uint32_t end, uint3
 
     qsort(timerResolutionDeltas, timerResolutionDeltasSize, sizeof(_IOptimizeTimerResoltionDelta), _IOptimizeTimerResoltionDeltaCmpFun);
 
-    IOptimizeLog("Chosen timer resolution: %u, Average delta from Sleep(%u): %0.4f\n", timerResolutionDeltas[0].resolution, sleepTimeBetweenQueries, timerResolutionDeltas[0].averageDelta);
+    IOptimizeLog("Chosen timer resolution: %u, Average delta from Sleep(%u): %0.4f\n", timerResolutionDeltas[0].resolution, 1, timerResolutionDeltas[0].averageDelta);
 
     uint32_t chosenResolution = timerResolutionDeltas[0].resolution;
 
