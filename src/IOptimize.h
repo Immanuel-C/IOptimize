@@ -9,13 +9,13 @@ extern "C" {
 /**
 * Set the Custom IOptimize Power Scheme.
 */
-IOPTIMIZE_API void IOptimizeSetPowerScheme();
+IOPTIMIZE_API void IOptimizeSetPowerScheme(IOptimizePowerOption* powerOptions, size_t powerOptionsSize, GUID subPowerScheme);
 /**
 * Set graphics cards message signal interrupt mode.
 * 
-* @param msi an int that must be either 1 or 0. 1 enables msi mode and 0 disables it.
+* @param msi an IOptimizeBool that must be either IOptimizeBoolValues::IOPTIMIZE_TRUE or IOptimizeBoolValues::IOPTIMIZE_FALSE. IOptimizeBoolValues::IOPTIMIZE_TRUE enables msi mode and IOptimizeBoolValues::IOPTIMIZE_FALSE disables it.
 */
-IOPTIMIZE_API void IOptimizeSetGpuMsiMode(int msi);
+IOPTIMIZE_API void IOptimizeSetGpuMsiMode(IOptimizeBool msi);
 /**
 * Set graphics cards message signal interrupt mode.
 *
@@ -52,7 +52,9 @@ IOPTIMIZE_API IOptimizeTimerResolutionValues IOptimizeQueryTimerResolution();
 * @param start a uint32_t that is the start of the micro adjusting. Must be greater or equal to the max timer resolution returned by IOptimizeQueryTimerResolution().
 * @param end a uint32_t that is the end of the micro adjusting. Must be less than or equal to the min timer resolution returned by IOptimizeQueryTimerResolution().
 * @param increment a uint32_t that is added to start until it reaches end. Each time this is added the function will benchmark the resolution.
-* @param samples a uint32_t that defines how many times we should benchmark each resolution. The higher the samples the longer the benchmark will be but the more acurate the results will be.
+* @param samples a uint32_t that defines how many times we should benchmark each resolution. The higher the samples the longer the benchmark will be but the more accurate the results will be.
+* 
+* @return the best timer resolution.
 */
 IOPTIMIZE_API uint32_t IOptimizeMicroAdjustTimerResolution(uint32_t start, uint32_t end, uint32_t increment, uint32_t samples);
 

@@ -41,5 +41,13 @@ namespace WPFFrontend
             values = IOptimize.IOptimizeQueryTimerResolution();
             TimerResolutionLabel.Content = "Timer Resolution: " + ((float)values.currResolution / 10000.0f) + "ms";
         }
+
+        private void BenchmarkTimerResolutionsButton_Click(object sender, RoutedEventArgs e)
+        {
+            UInt32 newTimerResolution = IOptimize.IOptimizeMicroAdjustTimerResolution(5000, 8000, 20, 20);
+            IOptimize.IOptimizeSetTimerResolution(newTimerResolution);
+            IOptimize.TimerResolutionValues values = IOptimize.IOptimizeQueryTimerResolution();
+            TimerResolutionLabel.Content = "Timer Resolution: " + ((float)values.currResolution / 10000.0f) + "ms";
+        }
     }
 }

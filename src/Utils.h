@@ -27,6 +27,8 @@ extern "C" {
 #define NULLPTR (void*)0
 #endif
 
+#define IOPTIMIZE_DEFUALT 0
+
 
 typedef struct IOptimizeVector2_T {
 	union { float width, x;  };
@@ -57,13 +59,23 @@ typedef enum IOptimizeBoolValues {
 	IOPTIMIZE_TRUE = 0x1,
 } IOptimizeBool;
 
+typedef struct IOptimizePowerOption_T {
+	wchar_t* name;
+	uint32_t value;
+	uint32_t maxValue;
+} IOptimizePowerOption;
+
 IOPTIMIZE_API void IOptimizeLog(const char* fmt, ...);
 IOPTIMIZE_API void IOptimizeLogErr(const char* fmt, ...);
 
+IOPTIMIZE_API void IOptimizeSprintf(char* buffer, size_t bufferSize, const char* fmt, ...);
+
 #if !defined(NDEBUG)
 #define IOPTIMIZE_ASSERT(condition, msg) assert((condition) && msg)
+#define IOPTIMIZE_STATIC_ASSERT(condition, msg) static_assert((condition), msg)
 #else 
 #define IOPTIMIZE_ASSERT(condition, msg)
+#define IOPTIMIZE_STATIC_ASSERT(condition, msg)
 #endif
 
 #ifdef __cplusplus

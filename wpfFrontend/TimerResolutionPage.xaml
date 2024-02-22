@@ -13,6 +13,7 @@
         <Label Name="TimerResolutionLabel" Style="{DynamicResource LabelStyle}" Content="Timer Resolution: " HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0, 100, 0, 0"/>
         <Button Name="SetMaxResolutionButton" Style="{DynamicResource ButtonStyle}" Width="100" Content="Max Resolution" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0, 150, 0, 0" Click="SetMaxResolutionButton_Click"/>
         <Button Name="SetMinResolutionButton" Style="{DynamicResource ButtonStyle}" Width="100" Content="Min Resolution" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0, 200, 0, 0" Click="SetMinResolutionButton_Click"/>
+        <Button Name="BenchmarkTimerResolutionsButton" Style="{DynamicResource ButtonStyle}" Width="175" Content="Benchmark Timer Resolutions" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0, 250, 0, 0" Click="BenchmarkTimerResolutionsButton_Click"/>
         <Label Style="{DynamicResource LabelStyle}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0, 300, 0, 0" >
             <TextBlock Style="{DynamicResource TextBoxStyle}" Text="For the timer resolution changes to work you need to be on Windows 11 and have the input delay registry optimizations enabled!" TextWrapping="Wrap"/>
         </Label>

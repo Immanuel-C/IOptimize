@@ -28,7 +28,7 @@ namespace WPFFrontend
             GameBoxLabel.Visibility = Visibility.Hidden;
             GameComboBox.Visibility = Visibility.Hidden;
 
-            OptimizeTypeComboBox.ItemsSource = optimizeTypeStrings; ;
+            OptimizeTypeComboBox.ItemsSource = optimizeTypeStrings; 
             GameComboBox.ItemsSource = gameOptimizeTypeStrings;
         }
 
@@ -101,7 +101,7 @@ namespace WPFFrontend
             {
                 if (MsiModeCheckBox.IsChecked == true)
                 {
-                    IOptimize.IOptimizeSetGpuMsiMode(1);
+                    IOptimize.IOptimizeSetGpuMsiMode(IOptimize.IOptimizeBool.True);
                 }
 
                 if (optimizeTypeFlags == IOptimize.IOptimizeTypeFlags.None)
@@ -122,7 +122,7 @@ namespace WPFFrontend
 
             private void RevertOptimizationButton_Click(object sender, RoutedEventArgs e)
             {
-                IOptimize.IOptimizeSetGpuMsiMode(0);
+                IOptimize.IOptimizeSetGpuMsiMode(IOptimize.IOptimizeBool.False);
                 IOptimize.IOptimizeSetRegistryTweaks(IOptimize.IOptimizeTypeFlags.Revert);
             }
 

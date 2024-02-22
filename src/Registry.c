@@ -25,14 +25,14 @@ typedef struct _IOptimizeDeleteRegistryValuesInfo_T {
 
 } _IOptimizeDeleteRegistryValuesInfo;
 
-static void _IOptimizeSetRegistryDwordValues( _IOptimizeSetRegistryDwordValuesInfo* info) {
+static void _IOptimizeSetRegistryDwordValues(_IOptimizeSetRegistryDwordValuesInfo* info) {
     HKEY key;
     LRESULT result = 0;
 
     result = RegCreateKeyExA(info->hKey, info->subKey, 0, NULLPTR, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULLPTR, &key, NULLPTR);
     if (result != ERROR_SUCCESS) {
         char info[512] = { 0 };
-        sprintf_s(info, 512, "RegCreateKeyEx failed\nError Code: %i", result);
+        IOptimizeSprintf(info, 512, "RegCreateKeyEx failed\nError Code: %i", result);
         MessageBoxA(NULL, info, "Error!", MB_OK);
         return;
     }
@@ -54,7 +54,7 @@ static void _IOptimizeDeleteRegistryValues( _IOptimizeDeleteRegistryValuesInfo* 
     result = RegCreateKeyExA(info->hKey, info->subKey, 0, NULLPTR, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULLPTR, &key, NULLPTR);
     if (result != ERROR_SUCCESS) {
         char info[512] = { 0 };
-        sprintf_s(info, 512, "RegCreateKeyEx failed\nError Code: %i", result);
+        sprintf(info, "RegCreateKeyEx failed\nError Code: %i", result);
         MessageBoxA(NULL, info, "Error!", MB_OK);
         return;
     }
@@ -88,9 +88,7 @@ static int _IOptimizeCheckInstances(int maxInstanceCount, const wchar_t* process
 }
 
 // TODO: Complete function
-void IOptimizeSetGpuMsiMode(int msi) {
-    IOPTIMIZE_ASSERT(msi == 1 || msi == 0, "IOptimizeSetGpuMsiMode() param msi is a boolean type and must be either 0 (false), 1 (true)!");
-
+void IOptimizeSetGpuMsiMode(IOptimizeBool msi) {
     int result;
     
     HDEVINFO hDevInfo = SetupDiGetClassDevs(
@@ -136,7 +134,7 @@ void IOptimizeSetGpuMsiMode(int msi) {
 
         const char* valueName = "MSISupported";
 
-        if (msi) {
+        if (msi == IOPTIMIZE_TRUE) {
             DWORD valueData = 0x00000001;
 
              _IOptimizeSetRegistryDwordValuesInfo setMsiModeRegistryValue = {
@@ -150,7 +148,7 @@ void IOptimizeSetGpuMsiMode(int msi) {
 
             _IOptimizeSetRegistryDwordValues(&setMsiModeRegistryValue);
         }
-        else if (!msi) {
+        else if (msi == IOPTIMIZE_FALSE) {
             DWORD valueData = 0x00000000;
 
              _IOptimizeSetRegistryDwordValuesInfo setMsiModeRegistryValue = {
@@ -539,9 +537,7 @@ static int _IOptimizeTimerResoltionDeltaCmpFun(const void* a, const void* b) {
     else return 0;
 }
 
-// Credit to amitxv 
-// https://github.com/amitxv/TimerResolution/blob/main/micro-adjust-benchmark.ps1
-// https://github.com/amitxv/PC-Tuning/blob/main/docs/research.md#micro-adjusting-timer-resolution-for-higher-precision
+
 uint32_t IOptimizeMicroAdjustTimerResolution(uint32_t start, uint32_t end, uint32_t increment, uint32_t samples) {
     {
         ULONG minResolution, maxResolution, currentResolution;

@@ -9,6 +9,7 @@ namespace IOptimizeWPFFrontend
 {
     static public class IOptimize 
     {
+
         [StructLayout(LayoutKind.Explicit)]
         public struct IOptimizeVector2
         {
@@ -22,7 +23,6 @@ namespace IOptimizeWPFFrontend
 
         }
 
-        
         [Flags]
         public enum IOptimizeTypeFlags
         {
@@ -36,18 +36,25 @@ namespace IOptimizeWPFFrontend
             ApexLegends = 0x00000010,
         }
 
+        public enum IOptimizeBool
+        {
+            True = 1,
+            False = 0,
+        }
+
         [DllImport("IOptimize.dll")]
         public static extern void IOptimizeSetRegistryTweaks(IOptimizeTypeFlags optimizeType);
 
         // Parameter msi is to be dealt with like a boolean
         [DllImport("IOptimize.dll")]
-        public static extern void IOptimizeSetGpuMsiMode(int msi);
+        public static extern void IOptimizeSetGpuMsiMode(IOptimizeBool msi);
 
         [DllImport("IOptimize.dll")]
         public static extern void IOptimizeSetDisplayResolution(int width, int height);
 
         [DllImport("IOptimize.dll")]
         public static extern void IOptimizeSetTimerResolution(UInt32 resolutionMs);
+
 
         public struct TimerResolutionValues
         {
@@ -56,5 +63,9 @@ namespace IOptimizeWPFFrontend
 
         [DllImport("IOptimize.dll")]
         public static extern TimerResolutionValues IOptimizeQueryTimerResolution();
+
+        [DllImport("IOptimize.dll")]
+        public static extern UInt32 IOptimizeMicroAdjustTimerResolution(UInt32 start, UInt32 end, UInt32 increment, UInt32 samples);
+
     }
 }
