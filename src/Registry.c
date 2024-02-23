@@ -22,14 +22,13 @@ typedef struct _IOptimizeDeleteRegistryValuesInfo_T {
     LPCSTR subKey;
     const char** valueNames;
     size_t valueNamesSize;
-
 } _IOptimizeDeleteRegistryValuesInfo;
 
-static void _IOptimizeSetRegistryDwordValues(_IOptimizeSetRegistryDwordValuesInfo* info) {
+static void __IOPTIMIZE_VECTORCALL _IOptimizeSetRegistryDwordValues(_IOptimizeSetRegistryDwordValuesInfo* info) {
     HKEY key;
     LRESULT result = 0;
 
-    result = RegCreateKeyExA(info->hKey, info->subKey, 0, NULLPTR, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULLPTR, &key, NULLPTR);
+    result = RegCreateKeyExA(info->hKey, info->subKey, 0, IOPTIMIZE_NULLPTR, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, IOPTIMIZE_NULLPTR, &key, IOPTIMIZE_NULLPTR);
     if (result != ERROR_SUCCESS) {
         char info[512] = { 0 };
         IOptimizeSprintf(info, 512, "RegCreateKeyEx failed\nError Code: %i", result);
@@ -48,13 +47,13 @@ static void _IOptimizeSetRegistryDwordValues(_IOptimizeSetRegistryDwordValuesInf
     RegCloseKey(key);
 }
 
-static void _IOptimizeDeleteRegistryValues( _IOptimizeDeleteRegistryValuesInfo* info) {
+static void  __IOPTIMIZE_VECTORCALL _IOptimizeDeleteRegistryValues( _IOptimizeDeleteRegistryValuesInfo* info) {
     HKEY key;
     LRESULT result;
-    result = RegCreateKeyExA(info->hKey, info->subKey, 0, NULLPTR, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULLPTR, &key, NULLPTR);
+    result = RegCreateKeyExA(info->hKey, info->subKey, 0, IOPTIMIZE_NULLPTR, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, IOPTIMIZE_NULLPTR, &key, IOPTIMIZE_NULLPTR);
     if (result != ERROR_SUCCESS) {
         char info[512] = { 0 };
-        sprintf(info, "RegCreateKeyEx failed\nError Code: %i", result);
+        IOptimizeSprintf(info, 512, "RegCreateKeyEx failed\nError Code: %i", result);
         MessageBoxA(NULL, info, "Error!", MB_OK);
         return;
     }
@@ -64,7 +63,7 @@ static void _IOptimizeDeleteRegistryValues( _IOptimizeDeleteRegistryValuesInfo* 
 
 // Credit to amitxv
 // https://github.com/amitxv/TimerResolution/blob/main/SetTimerResolution/SetTimerResolution/SetTimerResolution.cpp
-static int _IOptimizeCheckInstances(int maxInstanceCount, const wchar_t* processName) {
+static int  __IOPTIMIZE_VECTORCALL _IOptimizeCheckInstances(int maxInstanceCount, const wchar_t* processName) {
     int count = 0;
 
     HANDLE snapShot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
@@ -88,7 +87,7 @@ static int _IOptimizeCheckInstances(int maxInstanceCount, const wchar_t* process
 }
 
 // TODO: Complete function
-void IOptimizeSetGpuMsiMode(IOptimizeBool msi) {
+void __IOPTIMIZE_STDCALL IOptimizeSetGpuMsiMode(IOptimizeBool msi) {
     int result;
     
     HDEVINFO hDevInfo = SetupDiGetClassDevs(
@@ -169,7 +168,7 @@ void IOptimizeSetGpuMsiMode(IOptimizeBool msi) {
 }
 
 
-void IOptimizeSetRegistryTweaks(IOptimizeTypeFlags optimizeType) {
+void __IOPTIMIZE_STDCALL IOptimizeSetRegistryTweaks(IOptimizeTypeFlags optimizeType) {
 
     const char* valueNamesPriorities[] = {
         "CpuPriorityClass",
@@ -410,11 +409,11 @@ void IOptimizeSetRegistryTweaks(IOptimizeTypeFlags optimizeType) {
 extern NTSYSAPI NTSTATUS NTAPI NtQueryTimerResolution(PULONG MinimumResolution, PULONG MaximumResolution, PULONG CurrentResolution);
 extern NTSYSAPI NTSTATUS NTAPI NtSetTimerResolution(ULONG DesiredResolution, BOOLEAN SetResolution, PULONG CurrentResolution);
 
-IOptimizeTimerResolutionValues IOptimizeQueryTimerResolution() {
+IOptimizeTimerResolutionValues __IOPTIMIZE_STDCALL IOptimizeQueryTimerResolution() {
     ULONG minResolution, maxResolution, currResolution;
 
     if (NtQueryTimerResolution(&minResolution, &maxResolution, &currResolution)) {
-        MessageBoxA(NULLPTR, "NtQueryTimerResolution failed!", "Error!", MB_OK | MB_ICONERROR);
+        MessageBoxA(IOPTIMIZE_NULLPTR, "NtQueryTimerResolution failed!", "Error!", MB_OK | MB_ICONERROR);
         IOptimizeTimerResolutionValues failed = { 0, 0, 0 };
         return failed;
     }
@@ -429,14 +428,14 @@ IOptimizeTimerResolutionValues IOptimizeQueryTimerResolution() {
     return values;
 }
 
-void IOptimizeSetTimerResolution(uint32_t resolutionMs) {
+void __IOPTIMIZE_STDCALL IOptimizeSetTimerResolution(uint32_t resolutionMs) {
     if (!_IOptimizeCheckInstances(1, L"IOptimize.dll")) {
-        MessageBoxA(NULLPTR, "IOptimizeSetTimerResolution requires that only one instance of IOptimize is running!", "Error!", MB_OK | MB_ICONERROR);
+        MessageBoxA(IOPTIMIZE_NULLPTR, "IOptimizeSetTimerResolution requires that only one instance of IOptimize is running!", "Error!", MB_OK | MB_ICONERROR);
         return;
     }
 
     if (resolutionMs < 0) {
-        MessageBoxA(NULLPTR, "IOptimizeSetTimerResolution(uint32_t) requires that parameter uint32_t is not negative!", "Error!", MB_OK | MB_ICONERROR);
+        MessageBoxA(IOPTIMIZE_NULLPTR, "IOptimizeSetTimerResolution(uint32_t) requires that parameter uint32_t is not negative!", "Error!", MB_OK | MB_ICONERROR);
         return;
     }
 
@@ -452,7 +451,7 @@ void IOptimizeSetTimerResolution(uint32_t resolutionMs) {
 
 
     if (NtSetTimerResolution(resolutionMs, TRUE, &values.currResolution)) {
-        MessageBoxA(NULLPTR, "NtSetTimerResolution failed!", "Error!", MB_OK | MB_ICONERROR);
+        MessageBoxA(IOPTIMIZE_NULLPTR, "NtSetTimerResolution failed!", "Error!", MB_OK | MB_ICONERROR);
         return;
     }
 
@@ -465,7 +464,7 @@ typedef struct _IOptimizeTimerResoltionDelta_T {
 } _IOptimizeTimerResoltionDelta;
 
 
-static IOptimizeBool _IOptimizeBenchmarkTimerResolution(double* averageDeltaFromSleep, uint32_t samples, uint32_t sleepTimeBetweenQueries, uint32_t* minRes, uint32_t* maxRes, uint32_t* currentRes) {
+static IOptimizeBool __IOPTIMIZE_STDCALL _IOptimizeBenchmarkTimerResolution(double* averageDeltaFromSleep, uint32_t samples, uint32_t sleepTimeBetweenQueries, uint32_t* minRes, uint32_t* maxRes, uint32_t* currentRes) {
     IOPTIMIZE_ASSERT(sleepTimeBetweenQueries > 0, "_IOptimizeBenchmarkTimerResolution() param sleepTimeBetweenQueries must be higher than 0!");
     IOPTIMIZE_ASSERT(samples > 1, "_IOptimizeBenchmarkTimerResolution() param samples must be higher than 1!");
 
@@ -482,7 +481,7 @@ static IOptimizeBool _IOptimizeBenchmarkTimerResolution(double* averageDeltaFrom
     size_t sleepDeltasSize = (size_t)samples + 1;
     double* sleepDeltas = (double*)malloc(sizeof(double) * sleepDeltasSize);
 
-    if (sleepDeltas == NULLPTR) {
+    if (sleepDeltas == IOPTIMIZE_NULLPTR) {
         IOptimizeLogErr("Malloc failed!\n");
         return IOPTIMIZE_FALSE;
     }
@@ -516,11 +515,11 @@ static IOptimizeBool _IOptimizeBenchmarkTimerResolution(double* averageDeltaFrom
     
     (*averageDeltaFromSleep) = sum / sleepDeltasNewsize;
 
-    if (minRes != NULLPTR) 
+    if (minRes != IOPTIMIZE_NULLPTR) 
         (*minRes) = (uint32_t)minResolution;
-    if (maxRes != NULLPTR)
+    if (maxRes != IOPTIMIZE_NULLPTR)
         (*maxRes) = (uint32_t)maxResolution;
-    if (currentRes != NULLPTR)
+    if (currentRes != IOPTIMIZE_NULLPTR)
         (*currentRes) = (uint32_t)currentResolution;
 
     free(sleepDeltas);
@@ -528,7 +527,7 @@ static IOptimizeBool _IOptimizeBenchmarkTimerResolution(double* averageDeltaFrom
     return IOPTIMIZE_TRUE;
 }
 
-static int _IOptimizeTimerResoltionDeltaCmpFun(const void* a, const void* b) {
+static int __IOPTIMIZE_CDECL _IOptimizeTimerResoltionDeltaCmpFun(const void* a, const void* b) {
     const _IOptimizeTimerResoltionDelta* ta = (_IOptimizeTimerResoltionDelta*)a;
     const _IOptimizeTimerResoltionDelta* tb = (_IOptimizeTimerResoltionDelta*)b;
 
@@ -538,7 +537,7 @@ static int _IOptimizeTimerResoltionDeltaCmpFun(const void* a, const void* b) {
 }
 
 
-uint32_t IOptimizeMicroAdjustTimerResolution(uint32_t start, uint32_t end, uint32_t increment, uint32_t samples) {
+uint32_t __IOPTIMIZE_STDCALL IOptimizeMicroAdjustTimerResolution(uint32_t start, uint32_t end, uint32_t increment, uint32_t samples) {
     {
         ULONG minResolution, maxResolution, currentResolution;
 
@@ -562,7 +561,7 @@ uint32_t IOptimizeMicroAdjustTimerResolution(uint32_t start, uint32_t end, uint3
     size_t timerResolutionDeltasSize = (size_t)((double)(end - start) / increment);
     _IOptimizeTimerResoltionDelta* timerResolutionDeltas = (_IOptimizeTimerResoltionDelta*)malloc(sizeof(_IOptimizeTimerResoltionDelta) * timerResolutionDeltasSize);
 
-    if (timerResolutionDeltas == NULLPTR) {
+    if (timerResolutionDeltas == IOPTIMIZE_NULLPTR) {
         IOptimizeLogErr("malloc failed!\n");
         return 0;
     }
@@ -574,7 +573,7 @@ uint32_t IOptimizeMicroAdjustTimerResolution(uint32_t start, uint32_t end, uint3
         IOptimizeLog("Benchmarking timer resolution: %u, samples: %u\n", desiredResolution, samples);
 
         double averageDeltaFromSleep;
-        if (_IOptimizeBenchmarkTimerResolution(&averageDeltaFromSleep, samples, 1, NULLPTR, NULLPTR, NULLPTR) == IOPTIMIZE_FALSE) {
+        if (_IOptimizeBenchmarkTimerResolution(&averageDeltaFromSleep, samples, 1, IOPTIMIZE_NULLPTR, IOPTIMIZE_NULLPTR, IOPTIMIZE_NULLPTR) == IOPTIMIZE_FALSE) {
             IOptimizeLogErr("_IOptimizeBenchmarkTimerResolution failed!");
             return 0;
         }

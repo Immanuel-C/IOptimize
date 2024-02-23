@@ -7,40 +7,50 @@ extern "C" {
 #endif
 
 /**
-* Set the Custom IOptimize Power Scheme.
+* Set the current power scheme setting(s).
+* @param powerOptions A pointer to an array of IOptimizePowerOptions that contains the values to set.
+* @param powerOptionsSize A size_t that is set to how much elements powerOptions has.
+* @param powerSchemeSubGroup a IOptimizePowerSchemeSubGroup that represents the GUID of a subgroup in the current power scheme.
 */
-IOPTIMIZE_API void IOptimizeSetPowerScheme(IOptimizePowerOption* powerOptions, size_t powerOptionsSize, GUID subPowerScheme);
+IOPTIMIZE_API void __IOPTIMIZE_STDCALL IOptimizeSetPowerScheme(IOptimizePowerOption* powerOptions, size_t powerOptionsSize, IOptimizePowerSchemeSubGroup powerSchemeSubGroup);
+/**
+* Get the current power scheme setting(s)
+* @param powerOptions A pointer to an array of IOptimizePowerOptions. IOptimizePowerOptions::name must be set (e.g. Processor performance time check interval) and this function will set the values to what Win32 
+* @param powerOptionsSize A size_t that is set to how much elements powerOptions has.
+* @param powerSchemeSubGroup a IOptimizePowerSchemeSubGroup that represents the GUID of a subgroup in the current power scheme.
+*/
+IOPTIMIZE_API void __IOPTIMIZE_STDCALL IOptimizeQueryPowerSettingsValues(IOptimizePowerOption* powerOptions, size_t powerOptionsSize, IOptimizePowerSchemeSubGroup powerSchemeSubGroup);
 /**
 * Set graphics cards message signal interrupt mode.
 * 
 * @param msi an IOptimizeBool that must be either IOptimizeBoolValues::IOPTIMIZE_TRUE or IOptimizeBoolValues::IOPTIMIZE_FALSE. IOptimizeBoolValues::IOPTIMIZE_TRUE enables msi mode and IOptimizeBoolValues::IOPTIMIZE_FALSE disables it.
 */
-IOPTIMIZE_API void IOptimizeSetGpuMsiMode(IOptimizeBool msi);
+IOPTIMIZE_API void __IOPTIMIZE_STDCALL IOptimizeSetGpuMsiMode(IOptimizeBool msi);
 /**
 * Set graphics cards message signal interrupt mode.
 *
 * @param width an int that is the new width of the display
 * @param height an int that is the new height of the display
 */
-IOPTIMIZE_API void IOptimizeSetDisplayResolution(int width, int height);
+IOPTIMIZE_API void __IOPTIMIZE_STDCALL IOptimizeSetDisplayResolution(int width, int height);
 /**
 * Set IOptimize registry tweaks.
 *
 * @param optimizeType is an IOptimizeTypeFlags. If this bitfield contains IOptimizeTypeFlags::IOPTIMIZE_TYPE_FORTNITE or IOptimizeTypeFlags::IOPTIMIZE_TYPE_APEX_LEGENDS than it also must contain IOptimizeTypeFlags::IOPTIMIZE_TYPE_FPS
 */
-IOPTIMIZE_API void IOptimizeSetRegistryTweaks(IOptimizeTypeFlags optimizeType);
+IOPTIMIZE_API void __IOPTIMIZE_STDCALL IOptimizeSetRegistryTweaks(IOptimizeTypeFlags optimizeType);
 /**
 * Set the windows global timer resolution. This only works on Windows 11 and with IOptimizeSetRegistryTweaks() with IOptimizeTypeFlags::IOPTIMIZE_TYPE_LATENCY tweak enabled.
 *
 * @param resolutionMS a uint32_t that contains the resolution in miliseconds * 10000. 
 */
-IOPTIMIZE_API void IOptimizeSetTimerResolution(uint32_t resolutionMS);
+IOPTIMIZE_API void __IOPTIMIZE_STDCALL IOptimizeSetTimerResolution(uint32_t resolutionMS);
 /**
 * Get the windows global timer resolution, with the min and max timer resolution. 
 * 
 * @return all values are in miliseconds * 10000 format.
 */
-IOPTIMIZE_API IOptimizeTimerResolutionValues IOptimizeQueryTimerResolution();
+IOPTIMIZE_API IOptimizeTimerResolutionValues __IOPTIMIZE_STDCALL IOptimizeQueryTimerResolution();
 /**
 * Micro adjust timer resolution as these could give more better results than setting the timer resolution to the max.
 *
@@ -56,7 +66,7 @@ IOPTIMIZE_API IOptimizeTimerResolutionValues IOptimizeQueryTimerResolution();
 * 
 * @return the best timer resolution.
 */
-IOPTIMIZE_API uint32_t IOptimizeMicroAdjustTimerResolution(uint32_t start, uint32_t end, uint32_t increment, uint32_t samples);
+IOPTIMIZE_API uint32_t __IOPTIMIZE_STDCALL IOptimizeMicroAdjustTimerResolution(uint32_t start, uint32_t end, uint32_t increment, uint32_t samples);
 
 #ifdef __cplusplus
 }

@@ -6,7 +6,7 @@
 
 
 
-void IOptimizeSetDisplayResolution(int width, int height) {
+void __IOPTIMIZE_STDCALL IOptimizeSetDisplayResolution(int width, int height) {
     RECT oldScreenRes = { 0 };
     GetWindowRect(GetDesktopWindow(), &oldScreenRes);
 
