@@ -12,10 +12,18 @@ extern "C" {
 #error IOptimize only supports 86_64x Windows!
 #endif
 
-#ifdef IOPTIMIZE_EXPORT_DLL
-	#define IOPTIMIZE_API __declspec(dllexport)
+#if defined(IOPTIMIZE_EXPORT_DLL)
+#if defined(_MSC_VER) || defined(__clang__)
+#define IOPTIMIZE_API __declspec(dllexport)
+#else
+#define IOPTIMIZE_API __attribute__((dllexport))
+#endif
 #else 
-	#define IOPTIMIZE_API __declspec(dllimport)
+#if defined(_MSC_VER) || defined(__clang__)
+#define IOPTIMIZE_API __declspec(dllimport)
+#else 
+#define IOPTIMIZE_API __attribute__((dllimport))
+#endif
 #endif
 
 
