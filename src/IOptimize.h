@@ -7,17 +7,31 @@ extern "C" {
 #endif
 
 /**
+* Creating new functionality for IOptimize.
+* 
+* Prerequisites:
+*	- If you don't know how C/C++ calling conventions work read https://learn.microsoft.com/en-us/cpp/cpp/argument-passing-and-naming-conventions?view=msvc-170.
+* 
+* Creating new functions:
+*	- All functions that will be exposed to C# must have the __IOPTIMIZE_STDCALL calling convention and must not have variable arguments.
+*	- All functions with variable arguments must use the __IOPTIMIZE_CDECL calling convention.
+*	- All functions that only have parameters integral types or pointers must use calling convention __IOPTIMIZE_VECTORCALL.
+*	- All functions that do not have variable arguments and are not exposed to C# must use __IOPTIMIZE_FASTCALL.
+*	- All functions must have tests in the IOptimizeTest project. See Test.c to see how to properly create and call functions.
+*/
+
+/**
 * Set the current power scheme setting(s).
 * @param powerOptions A pointer to an array of IOptimizePowerOptions that contains the values to set.
 * @param powerOptionsSize A size_t that is set to how much elements powerOptions has.
-* @param powerSchemeSubGroup a IOptimizePowerSchemeSubGroup that represents the GUID of a subgroup in the current power scheme.
+* @param powerSchemeSubGroup a IOptimizePowerSchemeSubGroup that represents the GUID of a subgroup in the current power scheme. This function will only check for settings in this sub group.
 */
 IOPTIMIZE_API void __IOPTIMIZE_STDCALL IOptimizeSetPowerScheme(IOptimizePowerOption* powerOptions, size_t powerOptionsSize, IOptimizePowerSchemeSubGroup powerSchemeSubGroup);
 /**
 * Get the current power scheme setting(s)
-* @param powerOptions A pointer to an array of IOptimizePowerOptions. IOptimizePowerOptions::name must be set (e.g. Processor performance time check interval) and this function will set the values to what Win32 
+* @param powerOptions A pointer to an array of IOptimizePowerOptions. IOptimizePowerOptions::name must be set (e.g. Processor performance time check interval) and this function will set the values to what the Windows api returns.
 * @param powerOptionsSize A size_t that is set to how much elements powerOptions has.
-* @param powerSchemeSubGroup a IOptimizePowerSchemeSubGroup that represents the GUID of a subgroup in the current power scheme.
+* @param powerSchemeSubGroup a IOptimizePowerSchemeSubGroup that represents the GUID of a subgroup in the current power scheme. This function will only check for settings in this sub group.
 */
 IOPTIMIZE_API void __IOPTIMIZE_STDCALL IOptimizeQueryPowerSettingsValues(IOptimizePowerOption* powerOptions, size_t powerOptionsSize, IOptimizePowerSchemeSubGroup powerSchemeSubGroup);
 /**
